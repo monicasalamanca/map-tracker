@@ -9,12 +9,18 @@ const authReducer = (state, action) => {
       // Here we wanto to update oru object 
       //  we have to modify the object and return a new state
       return { ...state, errorMessage: action.payload }
-    case 'signup':
+    case 'clear_err_msg': 
+      return { ...state, errorMessage: '' }
+    case 'signin':
       return { errorMessage: '', token: action.payload }
     default: 
       return state;
   }
 };
+
+const clearErrorMsg = dispatch => () => {
+  dispatch({ type: 'clear_err_msg' })
+}
 
 // Everytime we create a action function its going to be a function with dispatch that will return a function
 const signup = dispatch => async ({ email, password }) => {
@@ -31,12 +37,23 @@ const signup = dispatch => async ({ email, password }) => {
   }
 };
 
-const signin = (dispatch) => {
-  return ({ email, password }) => {
-    // Try signin
-    // Handle success by updating state
-    // Handle failure by showing error message
-  };
+const signin = (dispatch) => async ({ email, password }) => {
+  try {
+    const response = await trackerApi.post('/signin', { email, password });
+    await AsyncStorage.setItem('token', response.data.token);
+
+    //dispatch new action
+    dispatch({ type: 'signin', payload: response.data.token });
+
+    // Navigate to Track List Screen
+    navigate('TrackList');
+
+  } catch (err) {
+    dispatch({
+      type: 'add_error',
+      payload: 'Something went wrong with signin'
+    })
+  }
 };
 
 const signout = (dispatch) => {
@@ -47,6 +64,6 @@ const signout = (dispatch) => {
 
 export const { Provider, Context } = CreateDataContext(
   authReducer,
-  { signin, signup, signout },
+  { signin, signup, signout, clearErrorMsg },
   { token: null, errorMessage: '' }
 );
