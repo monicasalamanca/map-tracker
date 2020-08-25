@@ -7,11 +7,11 @@ import SignupScreen from './SignupScreen';
 import { Context } from '../context/AuthContext';
 
 const SigninScreen = () => {
-  const { state, signin, clearErrMsg } = useContext(Context);
+  const { state, signin, clearErrorMsg } = useContext(Context);
 
   return (
     <View style={styles.container}>
-      <NavigationEvents onWillFocus={clearErrMsg} />
+      <NavigationEvents onWillFocus={clearErrorMsg} />
       <AuthForm 
         headerText="Sign in to your account"
         errorMessage={state.errorMessage}

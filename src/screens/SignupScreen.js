@@ -6,11 +6,11 @@ import AuthForm from '../components/AuthForm';
 import NavLink from '../components/NavLink';
 
 const SignupScreen = ({ navigation }) => {
-  const { state, signup, clearErrMsg } = useContext(AuthContext);
+  const { state, signup, clearErrorMsg } = useContext(AuthContext);
 
   return (
     <View style={styles.container}>
-      <NavigationEvents onWillFocus={clearErrMsg} />
+      <NavigationEvents onWillFocus={clearErrorMsg} />
       <AuthForm 
         headerText="Sing Up Track"
         errorMessage={state.errorMessage}
